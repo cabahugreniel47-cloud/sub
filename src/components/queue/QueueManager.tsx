@@ -234,11 +234,6 @@ export const QueueManager: React.FC = () => {
           <div className="flex items-center gap-2 text-xs font-semibold text-red-700 uppercase tracking-wider mb-1">
             <ClipboardList className="w-4 h-4" />
             <span>Clinic Queue & Patient Flow Control</span>
-            {isMobile && (
-              <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
-                📱 Mobile Mode Fitted
-              </span>
-            )}
           </div>
           <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
             <span>Live University Clinic Waiting Queue</span>
@@ -408,9 +403,8 @@ export const QueueManager: React.FC = () => {
       {isCardsView ? (
         /* Mobile Fitted Cards Grid */
         <div className="space-y-3">
-          <div className="flex items-center justify-between text-xs text-slate-500 px-1">
+          <div className="text-xs text-slate-500 px-1">
             <span>Showing <strong>{filteredQueue.length}</strong> queue tickets</span>
-            <span className="text-amber-800 font-medium">📱 Mobile Touch Cards Active</span>
           </div>
 
           {filteredQueue.length === 0 ? (
@@ -632,8 +626,7 @@ export const QueueManager: React.FC = () => {
         /* PC/Laptop Table View */
         <div className="bg-white rounded-xl border border-slate-200 shadow-2xs overflow-hidden">
           {isMobile && (
-            <div className="p-2 bg-amber-50 border-b border-amber-200 text-[11px] text-amber-800 flex items-center justify-between px-4">
-              <span>Touch Screen Detected</span>
+            <div className="p-2 bg-amber-50 border-b border-amber-200 text-[11px] text-amber-800 text-center px-4">
               <span className="font-semibold">↔ Swipe table horizontally for all columns</span>
             </div>
           )}

@@ -132,11 +132,6 @@ export const PatientList: React.FC = () => {
           <div className="flex items-center gap-2 text-xs font-semibold text-[#7F1416] uppercase tracking-wider mb-1">
             <Users className="w-4 h-4" />
             <span>Master Health Registry & Patient Records</span>
-            {isMobile && (
-              <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
-                📱 Mobile Mode Fitted
-              </span>
-            )}
           </div>
           <h1 className="text-xl font-bold text-slate-900">
             Current & Past Patient Database
@@ -333,9 +328,8 @@ export const PatientList: React.FC = () => {
       {isCards ? (
         /* Mobile Touch Card Layout */
         <div className="space-y-3">
-          <div className="flex items-center justify-between text-xs text-slate-500 px-1">
+          <div className="text-xs text-slate-500 px-1">
             <span>Showing <strong>{filteredPatients.length}</strong> {statusTab === 'archived' ? 'past/archived' : statusTab === 'active' ? 'current' : 'total'} records</span>
-            <span className="text-[#7F1416] font-medium">📱 Touch Optimized</span>
           </div>
 
           {filteredPatients.length === 0 ? (

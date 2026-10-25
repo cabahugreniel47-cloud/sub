@@ -246,15 +246,6 @@ export const ReportsAnalytics: React.FC = () => {
               <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
                 Reports & Analytics
               </h1>
-              {isMobile ? (
-                <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
-                  📱 Mobile Mode Fitted
-                </span>
-              ) : (
-                <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
-                  💻 PC / Laptop Mode Fitted
-                </span>
-              )}
             </div>
             <p className="text-xs text-slate-500 mt-0.5">
               View and analyze clinic data to support better decision-making and improved services.

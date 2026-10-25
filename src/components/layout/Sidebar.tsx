@@ -145,11 +145,8 @@ export const Sidebar: React.FC = () => {
 
       {/* Navigation List */}
       <nav className="flex-1 px-2.5 py-3 space-y-1 overflow-y-auto">
-        <div className="px-2 pb-1 text-[10px] font-bold uppercase tracking-wider text-red-300/70 flex items-center justify-between">
+        <div className="px-2 pb-1 text-[10px] font-bold uppercase tracking-wider text-red-300/70">
           <span>Navigation Menu</span>
-          {isMobile && (
-            <span className="text-[9px] font-normal text-amber-200/80">📱 Mobile Mode</span>
-          )}
         </div>
 
         {navItems.map(item => {
@@ -277,21 +274,29 @@ export const Sidebar: React.FC = () => {
     </div>
   );
 
-  // If Mobile Mode: Render overlay drawer when mobileMenuOpen is true
+  // If Mobile Mode: Render overlay drawer with smooth open/close transitions
   if (isMobile) {
-    if (!mobileMenuOpen) return null;
-
     return (
-      <div className="fixed inset-0 z-50 overflow-hidden animate-in fade-in duration-200">
+      <div
+        className={`fixed inset-0 z-50 overflow-hidden transition-all duration-300 ${
+          mobileMenuOpen ? 'pointer-events-auto visible' : 'pointer-events-none invisible delay-300'
+        }`}
+      >
         {/* Backdrop overlay */}
         <div
           onClick={() => setMobileMenuOpen(false)}
-          className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
+          className={`fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity duration-300 ease-in-out ${
+            mobileMenuOpen ? 'opacity-100' : 'opacity-0'
+          }`}
           aria-hidden="true"
         />
 
         {/* Drawer panel */}
-        <div className="fixed inset-y-0 left-0 w-72 max-w-[85vw] flex flex-col shadow-2xl z-50 animate-in slide-in-from-left duration-250 ease-out border-r border-red-950/50">
+        <div
+          className={`fixed inset-y-0 left-0 w-72 max-w-[85vw] flex flex-col shadow-2xl z-50 border-r border-red-950/50 transform transition-transform duration-300 ease-in-out ${
+            mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+          }`}
+        >
           {sidebarContent}
         </div>
       </div>
