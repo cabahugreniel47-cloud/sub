@@ -1,0 +1,8 @@
+{
+  "name": "Pampanga State University Medical Clinic Information System 6.0",
+  "description": "Professional Web-Based Medical Clinic Information System for Pampanga State University (Capstone 2). Comprehensive clinical management, role-based dashboards for Administrator, Doctor, Nurse, and Clinic Staff, patient records, vital signs, queue management, electronic medical records, consultations, prescriptions, inventory monitoring, reports, and activity logs.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "summary": "Plan to delete all 18 duplicate patient records and 18 duplicate queue tickets for 'den denden', keeping exactly 1 primary patient record and 1 active queue ticket, plus adding deduplication safeguards in the patient registration endpoint.",
+  "updatedAt": "2026-10-18T02:09:54.335151914Z",
+  "requestFeedback": true,
+  "userFacing": true
+}
