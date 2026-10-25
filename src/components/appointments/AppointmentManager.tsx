@@ -23,6 +23,7 @@ import {
 export const AppointmentManager: React.FC = () => {
   const {
     currentUser,
+    users,
     appointments,
     addAppointment,
     updateAppointmentStatus,
@@ -35,24 +36,37 @@ export const AppointmentManager: React.FC = () => {
     showToast
   } = useClinic();
 
+  const activePersonnel = users.filter(
+    u => (u.role === 'doctor' || u.role === 'nurse') && (u.status === 'active' || u.accountStatus === 'active')
+  );
+
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedAppointmentForView, setSelectedAppointmentForView] = useState<Appointment | null>(null);
   const [selectedPatientId, setSelectedPatientId] = useState(patients[0]?.id || '');
   const [purpose, setPurpose] = useState<Appointment['purpose']>('Physician Consultation');
-  const [date, setDate] = useState('2026-09-27');
+  const [date, setDate] = useState(() => new Date().toISOString().split('T')[0]);
   const [time, setTime] = useState('10:00 AM');
-  const [doctorName, setDoctorName] = useState('Dr. Roberto M. Manalo, MD');
+  const [doctorName, setDoctorName] = useState(activePersonnel[0]?.fullName || 'Dr. Reniel V. Cabahug, MD, FPCP');
   const [notes, setNotes] = useState('Routine clinical checkup');
+
+  // Keep doctor selection updated if active personnel list loads/changes
+  React.useEffect(() => {
+    if (activePersonnel.length > 0 && !activePersonnel.some(p => p.fullName === doctorName)) {
+      setDoctorName(activePersonnel[0].fullName);
+    }
+  }, [activePersonnel, doctorName]);
 
   const [filterPurpose, setFilterPurpose] = useState<string>('all');
   const [filterStatus, setFilterStatus] = useState<string>('all');
 
   const isStudent = currentUser?.role === 'student';
   const myRecord = patients.find(
-    p => (currentUser?.email && p.email.toLowerCase() === currentUser.email.toLowerCase()) ||
+    p => (currentUser?.email && p.email?.toLowerCase() === currentUser.email.toLowerCase()) ||
          (currentUser?.institutionalId && p.psuId === currentUser.institutionalId) ||
          (currentUser?.fullName && `${p.firstName} ${p.lastName}`.toLowerCase() === currentUser.fullName.toLowerCase())
-  );
+  ) || (isStudent && patients.length > 0 ? patients[0] : undefined);
+
+  const effectivePatient = isStudent ? (myRecord || patients[0]) : patients.find(p => p.id === selectedPatientId) || patients[0];
 
   const filteredAppointments = appointments.filter(a => {
     if (isStudent) {
@@ -68,8 +82,13 @@ export const AppointmentManager: React.FC = () => {
 
   const handleCreateAppointment = async (e: React.FormEvent) => {
     e.preventDefault();
-    const pat = patients.find(p => p.id === selectedPatientId);
-    if (!pat) return;
+    const pat = isStudent ? effectivePatient : (patients.find(p => p.id === selectedPatientId) || effectivePatient);
+    if (!pat) {
+      showToast('Could not resolve patient record. Please verify your profile.', 'error');
+      return;
+    }
+
+    const assignedDoctor = doctorName || activePersonnel[0]?.fullName || 'Clinic Physician';
 
     const newApt = addAppointment({
       patientId: pat.id,
@@ -79,7 +98,7 @@ export const AppointmentManager: React.FC = () => {
       purpose,
       date,
       time,
-      doctorName,
+      doctorName: assignedDoctor,
       notes,
       status: 'Scheduled'
     });
@@ -89,7 +108,7 @@ export const AppointmentManager: React.FC = () => {
       await SMSNotificationService.sendAppointmentReminder(pat, newApt);
     }
 
-    showToast(`Appointment scheduled for ${pat.firstName} ${pat.lastName} on ${date} at ${time}! SMS confirmation sent to ${pat.contactNumber}`, 'success');
+    showToast(`Appointment scheduled for ${pat.firstName} ${pat.lastName} on ${date} at ${time}!`, 'success');
     setShowAddModal(false);
   };
 
@@ -218,7 +237,7 @@ export const AppointmentManager: React.FC = () => {
                       {apt.notes}
                     </td>
                     <td className="py-3 px-4">
-                      <span className={`inline-block px-2 py-0.5 rounded text-[11px] font-bold ${
+                      <span className={`inline-block px-2 py-0.5 rounded text-[11px] font-bold whitespace-nowrap shrink-0 ${
                         apt.status === 'Confirmed' ? 'bg-blue-100 text-blue-800' :
                         apt.status === 'Completed' ? 'bg-emerald-100 text-emerald-800' :
                         apt.status === 'Cancelled' ? 'bg-red-100 text-red-800' :
@@ -229,7 +248,7 @@ export const AppointmentManager: React.FC = () => {
                     </td>
                     <td className="py-3 px-4 text-right">
                       {isStudent ? (
-                        <span className={`inline-block px-2.5 py-1 rounded text-[11px] font-bold ${
+                        <span className={`inline-block px-2.5 py-1 rounded text-[11px] font-bold whitespace-nowrap shrink-0 ${
                           apt.status === 'Completed' ? 'bg-emerald-100 text-emerald-800' :
                           apt.status === 'Confirmed' ? 'bg-blue-100 text-blue-800' :
                           apt.status === 'Cancelled' ? 'bg-red-100 text-red-800' :
@@ -328,14 +347,13 @@ export const AppointmentManager: React.FC = () => {
           <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden">
             <div className="p-4 border-b border-slate-200 bg-red-900 text-white flex items-center justify-between">
               <span className="font-bold text-sm">Schedule Clinic Appointment</span>
-              <button onClick={() => setShowAddModal(false)} className="text-red-200 hover:text-white">✕</button>
             </div>
             <form onSubmit={handleCreateAppointment} className="p-5 space-y-3.5 text-xs text-slate-700">
               <div>
                 <label className="block font-semibold mb-1">Patient</label>
-                {currentUser?.role === 'student' ? (
+                {isStudent ? (
                   <div className="p-2.5 bg-slate-100 border border-slate-200 rounded font-semibold text-slate-800">
-                    {patients[0] ? `${patients[0].firstName} ${patients[0].lastName} (${patients[0].psuId})` : currentUser.fullName}
+                    {effectivePatient ? `${effectivePatient.firstName} ${effectivePatient.lastName} (${effectivePatient.psuId})` : currentUser?.fullName}
                   </div>
                 ) : (
                   <select
@@ -392,12 +410,21 @@ export const AppointmentManager: React.FC = () => {
 
               <div>
                 <label className="block font-semibold mb-1">Attending Physician / Personnel</label>
-                <input
-                  type="text"
+                <select
                   value={doctorName}
                   onChange={(e) => setDoctorName(e.target.value)}
-                  className="w-full p-2 bg-slate-50 border border-slate-300 rounded"
-                />
+                  className="w-full p-2 bg-slate-50 border border-slate-300 rounded font-medium cursor-pointer"
+                >
+                  {activePersonnel.length > 0 ? (
+                    activePersonnel.map(u => (
+                      <option key={u.id} value={u.fullName}>
+                        {u.fullName} ({u.role === 'doctor' ? 'University Physician' : 'University Nurse'})
+                      </option>
+                    ))
+                  ) : (
+                    <option value={doctorName}>{doctorName}</option>
+                  )}
+                </select>
               </div>
 
               <div>

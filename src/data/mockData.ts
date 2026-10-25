@@ -134,29 +134,7 @@ export const INITIAL_PATIENTS: Patient[] = [
   }
 ];
 
-export const INITIAL_VITALS: VitalSigns[] = [
-  {
-    id: 'vs-student-1',
-    patientId: 'pat-student-1',
-    recordedByUserId: 'usr-nurse-1',
-    recordedByName: 'Mary Jane P. Santos, RN',
-    timestamp: '2026-10-14 09:10 AM',
-    bloodPressureSystolic: 118,
-    bloodPressureDiastolic: 78,
-    heartRate: 74,
-    respiratoryRate: 18,
-    temperature: 36.6,
-    oxygenSaturation: 99,
-    heightCm: 172,
-    weightKg: 65,
-    bmi: 22.0,
-    bmiClassification: 'Normal',
-    painScale: 1,
-    chiefComplaint: 'Mild dry cough & seasonal congestion',
-    triageLevel: 'Standard',
-    nurseNotes: 'Vital signs within normal limits. Patient coherent and ambulatory.'
-  }
-];
+export const INITIAL_VITALS: VitalSigns[] = [];
 
 export const INITIAL_MEDICINES: Medicine[] = [
   {
@@ -376,135 +354,13 @@ export const INITIAL_TRANSACTIONS: InventoryTransaction[] = [
   }
 ];
 
-export const INITIAL_QUEUE: QueueTicket[] = [
-  {
-    id: 'q-student-1',
-    ticketNumber: 'T-105',
-    patientId: 'pat-student-1',
-    patientName: 'Juan D. Cruz',
-    patientPsuId: '2024-00123-BC',
-    patientClassification: 'Student',
-    priority: 'Regular',
-    stage: 'In Consultation',
-    callStatus: 'Calling',
-    counterOrRoom: 'Consultation Room 1 (Dr. Manalo)',
-    chiefComplaint: 'Follow-up check and prescription clearance',
-    createdAt: '2026-10-14 09:15 AM'
-  }
-];
+export const INITIAL_QUEUE: QueueTicket[] = [];
 
-export const INITIAL_CONSULTATIONS: Consultation[] = [
-  {
-    id: 'con-student-1',
-    patientId: 'pat-student-1',
-    doctorId: 'usr-doc-1',
-    doctorName: 'Dr. Roberto M. Manalo, MD, FPCP',
-    doctorLicense: '0098412',
-    doctorPtr: 'PTR-8834921-2026',
-    vitalSignsId: 'vs-student-1',
-    date: '2026-10-14',
-    time: '09:20 AM',
-    subjective: 'Patient reports 2-day history of dry cough and mild allergic rhinitis. No fever, dyspnea, or chest pain.',
-    physicalExamFindings: {
-      generalSurvey: 'Conscious, coherent, oriented to 3 spheres, ambulatory',
-      heent: 'Normocephalic, pink palpebral conjunctivae, clear nasal passages',
-      chestLungs: 'Symmetric chest expansion, clear breath sounds, no rales/wheezing',
-      cardiovascular: 'Adynamic precordium, normal rate, regular rhythm, S1/S2 distinct',
-      abdomen: 'Flat, soft, non-tender, active bowel sounds',
-      extremities: 'Full equal peripheral pulses, pink nail beds, capillary refill < 2s'
-    },
-    assessmentDiagnosis: 'Acute Upper Respiratory Tract Infection (URTI) / Allergic Rhinitis',
-    icd10Code: 'J06.9',
-    planAndManagement: 'Supportive therapy, oral hydration, warm saline gargles, adequate rest.',
-    recommendations: 'Rest for 48 hours, stay well hydrated, return if symptoms worsen or fever develops.',
-    followUpDate: '2026-10-17',
-    prescriptions: [
-      {
-        id: 'rx-std-1',
-        medicineId: 'med-3',
-        genericName: 'Cetirizine Dihydrochloride',
-        brandName: 'Alnix',
-        dosageStrength: '10 mg',
-        dosageForm: 'Tablet',
-        frequency: 'Once daily at bedtime',
-        durationDays: 5,
-        quantity: 5,
-        instructions: 'Take 1 tablet at night for 5 days.',
-        dispensed: true,
-        dispensedAt: '2026-10-14 09:25 AM',
-        dispensedBy: 'Mary Jane P. Santos, RN'
-      },
-      {
-        id: 'rx-std-2',
-        medicineId: 'med-1',
-        genericName: 'Paracetamol',
-        brandName: 'Biogesic',
-        dosageStrength: '500 mg',
-        dosageForm: 'Tablet',
-        frequency: 'Every 4-6 hours as needed for headache',
-        durationDays: 3,
-        quantity: 6,
-        instructions: 'Take 1 tablet every 6 hours PRN for headache.',
-        dispensed: true,
-        dispensedAt: '2026-10-14 09:25 AM',
-        dispensedBy: 'Mary Jane P. Santos, RN'
-      }
-    ],
-    medicalCertificateIssued: true,
-    medicalCertificateId: 'cert-student-1',
-    status: 'approved',
-    approvalStatus: 'approved',
-    isApproved: true,
-    approvedAt: '2026-10-14 09:30 AM',
-    approvedByDoctorId: 'usr-doc-1',
-    approvedByDoctorName: 'Dr. Roberto M. Manalo, MD, FPCP',
-    approvedByDoctorLicense: '0098412',
-    approvalNotes: 'Consultation reviewed, prescriptions authorized, and student cleared for symptomatic self-care with excused absence.'
-  }
-];
+export const INITIAL_CONSULTATIONS: Consultation[] = [];
 
-export const INITIAL_CERTIFICATES: MedicalCertificate[] = [
-  {
-    id: 'cert-student-1',
-    certificateNumber: 'MC-2026-0041',
-    patientId: 'pat-student-1',
-    patientName: 'Juan D. Cruz',
-    patientAge: 23,
-    patientGender: 'Male',
-    patientAddress: 'Bacolor, Pampanga',
-    patientPsuId: '2024-00123-BC',
-    consultationDate: '2026-10-14',
-    diagnosis: 'Acute Upper Respiratory Tract Infection (URTI) - Mild, Improving',
-    treatmentAndRemarks: 'Patient was medically examined at the University Health Services and is certified fit for light academic duties. Advised 2 days rest and hydration.',
-    recommendedRestDays: 2,
-    restFromDate: '2026-10-14',
-    restToDate: '2026-10-16',
-    fitToResumeStudiesOrWork: true,
-    fitDate: '2026-10-16',
-    doctorName: 'Dr. Roberto M. Manalo, MD, FPCP',
-    doctorTitle: 'University Physician',
-    doctorLicense: '0098412',
-    doctorPtr: 'PTR-8834921-2026',
-    issuedAt: '2026-10-14 09:30 AM'
-  }
-];
+export const INITIAL_CERTIFICATES: MedicalCertificate[] = [];
 
-export const INITIAL_APPOINTMENTS: Appointment[] = [
-  {
-    id: 'apt-student-1',
-    patientId: 'pat-student-1',
-    patientName: 'Juan D. Cruz',
-    patientPsuId: '2024-00123-BC',
-    classification: 'Student',
-    date: '2026-10-17',
-    time: '10:00 AM',
-    purpose: 'Follow-up',
-    status: 'Confirmed',
-    doctorName: 'Dr. Roberto M. Manalo, MD',
-    notes: 'Check resolution of cough and nasal symptoms',
-    createdAt: '2026-10-14 09:30 AM'
-  }
-];
+export const INITIAL_APPOINTMENTS: Appointment[] = [];
 
 
 export const INITIAL_LOGS: ActivityLog[] = [

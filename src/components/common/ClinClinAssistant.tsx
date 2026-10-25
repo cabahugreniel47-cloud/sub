@@ -34,11 +34,37 @@ export const ClinClinAssistant: React.FC = () => {
   } = useClinic();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isDocked, setIsDocked] = useState(false);
   const [messages, setMessages] = useState<ClinClinMessage[]>([]);
   const [inputQuery, setInputQuery] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [hasUnread, setHasUnread] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Swipe / Drag detection to slide to the right
+  const touchStartXRef = useRef<number | null>(null);
+  const touchDeltaXRef = useRef<number>(0);
+
+  const handleTouchStart = (e: React.TouchEvent | React.MouseEvent) => {
+    const clientX = 'touches' in e ? e.touches[0].clientX : (e as React.MouseEvent).clientX;
+    touchStartXRef.current = clientX;
+    touchDeltaXRef.current = 0;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent | React.MouseEvent) => {
+    if (touchStartXRef.current === null) return;
+    const clientX = 'touches' in e ? e.touches[0].clientX : (e as React.MouseEvent).clientX;
+    touchDeltaXRef.current = clientX - touchStartXRef.current;
+  };
+
+  const handleTouchEnd = () => {
+    if (touchDeltaXRef.current > 30) {
+      // Swiped or dragged to the right - hide/dock Clin Clin
+      setIsDocked(true);
+    }
+    touchStartXRef.current = null;
+    touchDeltaXRef.current = 0;
+  };
 
   // Initialize role-specific warm greeting on mount or role change
   useEffect(() => {
@@ -192,6 +218,10 @@ export const ClinClinAssistant: React.FC = () => {
   };
 
   const handleOpen = () => {
+    if (isDocked) {
+      setIsDocked(false);
+      return;
+    }
     setIsOpen(true);
     setHasUnread(false);
   };
@@ -200,53 +230,73 @@ export const ClinClinAssistant: React.FC = () => {
 
   return (
     <>
-      {/* Floating Clin Clin Mascot Button (Lower-Right) */}
-      <div className={`fixed z-50 transition-all duration-300 ${
-        isMobile ? 'bottom-20 right-4' : 'bottom-6 right-6'
-      }`}>
+      {/* Floating Clin Clin Mascot Button (Lower-Right) with Slide-to-Hide & Half-Face Peek */}
+      <div
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onMouseDown={handleTouchStart}
+        onMouseMove={handleTouchMove}
+        onMouseUp={handleTouchEnd}
+        className={`fixed z-50 transition-all duration-300 ease-in-out select-none ${
+          isMobile ? 'bottom-20' : 'bottom-6'
+        } ${
+          isDocked
+            ? 'right-0 translate-x-[calc(100%-30px)] cursor-pointer'
+            : isMobile ? 'right-4 translate-x-0' : 'right-6 translate-x-0'
+        }`}
+      >
         {!isOpen && (
-          <button
-            onClick={handleOpen}
-            className="group relative flex items-center gap-2 p-2 sm:p-2.5 bg-gradient-to-r from-[#7F1416] via-[#94191c] to-[#7F1416] hover:from-[#6b0f11] hover:to-[#7F1416] text-white rounded-full shadow-2xl border-2 border-amber-300/80 transition-all hover:scale-105 active:scale-95 cursor-pointer ring-4 ring-red-900/20"
-            title="Chat with Clin Clin (AI Virtual Clinic Assistant)"
-          >
-            {/* Mascot Avatar Icon */}
-            <div className="relative w-11 h-11 rounded-full bg-white flex items-center justify-center overflow-hidden border-2 border-red-700 shadow-md">
-              {/* Cute Stylized Clin Clin Character */}
-              <div className="w-full h-full bg-gradient-to-b from-white to-red-50 flex flex-col items-center justify-center relative">
-                {/* Red cross cap */}
-                <div className="w-5 h-2 bg-red-700 rounded-t-full absolute top-1 flex items-center justify-center">
-                  <div className="w-1.5 h-1 bg-white" />
+          <div className="relative flex items-center">
+            <button
+              onClick={handleOpen}
+              className={`group relative flex items-center gap-2 p-2 sm:p-2.5 bg-gradient-to-r from-[#7F1416] via-[#94191c] to-[#7F1416] hover:from-[#6b0f11] hover:to-[#7F1416] text-white rounded-full shadow-2xl border-2 border-amber-300/80 transition-all cursor-pointer ring-4 ring-red-900/20 ${
+                isDocked
+                  ? 'hover:scale-105 active:scale-95'
+                  : 'hover:scale-105 active:scale-95'
+              }`}
+              title={isDocked ? "Click to bring Clin Clin back" : "Chat with Clin Clin (Swipe right to hide)"}
+            >
+              {/* Mascot Avatar Icon - Exactly half stays peeked when docked */}
+              <div className="relative w-11 h-11 rounded-full bg-white flex items-center justify-center overflow-hidden border-2 border-red-700 shadow-md shrink-0">
+                {/* Cute Stylized Clin Clin Character */}
+                <div className="w-full h-full bg-gradient-to-b from-white to-red-50 flex flex-col items-center justify-center relative">
+                  {/* Red cross cap */}
+                  <div className="w-5 h-2 bg-red-700 rounded-t-full absolute top-1 flex items-center justify-center">
+                    <div className="w-1.5 h-1 bg-white" />
+                  </div>
+                  {/* Friendly Eyes */}
+                  <div className="flex items-center gap-1.5 mt-2">
+                    <span className="w-1.5 h-2 bg-slate-900 rounded-full animate-bounce" />
+                    <span className="w-1.5 h-2 bg-slate-900 rounded-full animate-bounce delay-100" />
+                  </div>
+                  {/* Sweet smile */}
+                  <div className="w-2.5 h-1 border-b-2 border-red-800 rounded-full mt-0.5" />
                 </div>
-                {/* Friendly Eyes */}
-                <div className="flex items-center gap-1.5 mt-2">
-                  <span className="w-1.5 h-2 bg-slate-900 rounded-full animate-bounce" />
-                  <span className="w-1.5 h-2 bg-slate-900 rounded-full animate-bounce delay-100" />
-                </div>
-                {/* Sweet smile */}
-                <div className="w-2.5 h-1 border-b-2 border-red-800 rounded-full mt-0.5" />
+
+                {/* Glowing Pulse Ring */}
+                <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-emerald-400 border-2 border-white rounded-full animate-ping" />
               </div>
 
-              {/* Glowing Pulse Ring */}
-              <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-emerald-400 border-2 border-white rounded-full animate-ping" />
-            </div>
-
-            <div className="hidden sm:flex flex-col text-left pr-2">
-              <span className="font-extrabold text-xs text-white flex items-center gap-1">
-                <span>Clin Clin</span>
-                <span className="px-1.5 py-0.2 rounded-full text-[9px] font-black bg-amber-400 text-slate-950 uppercase tracking-tighter">
-                  AI Guide
+              {/* Text Pill (Visible when not docked) */}
+              <div className="hidden sm:flex flex-col text-left pr-1">
+                <span className="font-extrabold text-xs text-white flex items-center gap-1">
+                  <span>Clin Clin</span>
+                  <span className="px-1.5 py-0.2 rounded-full text-[9px] font-black bg-amber-400 text-slate-950 uppercase tracking-tighter">
+                    AI Guide
+                  </span>
                 </span>
-              </span>
-              <span className="text-[10px] text-red-200">PSU Clinic Assistant</span>
-            </div>
+                <span className="text-[10px] text-red-200">PSU Clinic Assistant</span>
+              </div>
 
-            {hasUnread && (
-              <span className="absolute -top-1 -right-1 px-2 py-0.5 bg-amber-400 text-slate-950 font-black text-[10px] rounded-full shadow-md animate-bounce">
-                Ask Me!
-              </span>
-            )}
-          </button>
+              {/* Unread Ask Me Badge */}
+              {hasUnread && !isDocked && (
+                <span className="absolute -top-1 -right-1 px-2 py-0.5 bg-amber-400 text-slate-950 font-black text-[10px] rounded-full shadow-md animate-bounce">
+                  Ask Me!
+                </span>
+              )}
+            </button>
+          </div>
         )}
       </div>
 

@@ -167,7 +167,7 @@ const ClinicAppContent: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col text-slate-800 font-sans">
+    <div className="min-h-screen bg-slate-50 flex flex-col text-slate-800 font-sans overflow-x-hidden">
       <Navbar />
       <DeviceToast />
 

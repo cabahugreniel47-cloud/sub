@@ -148,21 +148,21 @@ export const NurseDashboard: React.FC = () => {
               return (
                 <div key={ticket.id} className="p-4 hover:bg-slate-50/80 transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="space-y-1">
-                    <div className="flex items-center gap-3">
-                      <span className="font-mono font-bold text-red-800 text-base">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                      <span className="font-mono font-bold text-red-800 text-base whitespace-nowrap">
                         {ticket.ticketNumber}
                       </span>
                       <span className="font-bold text-slate-900 text-sm">
                         {ticket.patientName}
                       </span>
-                      <span className="text-xs font-mono text-slate-400">
+                      <span className="text-xs font-mono text-slate-400 whitespace-nowrap">
                         {ticket.patientPsuId}
                       </span>
-                      <span className="text-[11px] px-2 py-0.5 rounded bg-slate-100 font-medium text-slate-700">
+                      <span className="text-[11px] px-2 py-0.5 rounded bg-slate-100 font-medium text-slate-700 whitespace-nowrap shrink-0">
                         {ticket.patientClassification}
                       </span>
                       {ticket.priority !== 'Regular' && (
-                        <span className="text-[11px] px-2 py-0.5 rounded bg-red-100 font-bold text-red-800">
+                        <span className="text-[11px] px-2 py-0.5 rounded bg-red-100 font-bold text-red-800 whitespace-nowrap shrink-0">
                           {ticket.priority}
                         </span>
                       )}

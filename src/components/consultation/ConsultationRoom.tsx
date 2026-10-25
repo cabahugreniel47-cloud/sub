@@ -811,19 +811,21 @@ export const ConsultationRoom: React.FC = () => {
                 <Ticket className="w-4 h-4" />
               </div>
               <div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <h3 className="font-bold text-slate-900 text-xs uppercase tracking-wider">
                     Live Doctor Consultation Queue
                   </h3>
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900">
-                    {waitingDoctorTickets.length} waiting
-                  </span>
-                  {currentQueueTicket && (
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-900 flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span>
-                      <span>Now in Room: Ticket #{currentQueueTicket.ticketNumber}</span>
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900 whitespace-nowrap shrink-0">
+                      {waitingDoctorTickets.length} waiting
                     </span>
-                  )}
+                    {currentQueueTicket && (
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-900 flex items-center gap-1 whitespace-nowrap shrink-0">
+                        <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse shrink-0"></span>
+                        <span>Now in Room: Ticket #{currentQueueTicket.ticketNumber}</span>
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <p className="text-[11px] text-slate-500">
                   Triaged walk-in and scheduled patients ready for physician clinical examination.

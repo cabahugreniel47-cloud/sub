@@ -243,20 +243,22 @@ export const DoctorDashboard: React.FC = () => {
               <Stethoscope className="w-5 h-5" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <h3 className="font-bold text-slate-900 text-sm">
                   Live Consultation Queue (Triaged by Nursing Staff)
                 </h3>
-                {waitingDoctorTickets.length > 0 && (
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">
-                    {waitingDoctorTickets.length} waiting
-                  </span>
-                )}
-                {inConsultationTickets.length > 0 && (
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">
-                    {inConsultationTickets.length} in exam
-                  </span>
-                )}
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  {waitingDoctorTickets.length > 0 && (
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 whitespace-nowrap shrink-0">
+                      {waitingDoctorTickets.length} waiting
+                    </span>
+                  )}
+                  {inConsultationTickets.length > 0 && (
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 whitespace-nowrap shrink-0">
+                      {inConsultationTickets.length} in exam
+                    </span>
+                  )}
+                </div>
               </div>
               <p className="text-[11px] text-slate-500">
                 Patients who have completed vital signs intake and are awaiting physician consultation.
@@ -453,20 +455,20 @@ export const DoctorDashboard: React.FC = () => {
               return (
                 <div key={apt.id} className="p-4 hover:bg-slate-50/80 transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="space-y-1.5 flex-1">
-                    <div className="flex items-center gap-3">
-                      <span className="font-mono font-bold text-red-800 text-sm">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                      <span className="font-mono font-bold text-red-800 text-sm whitespace-nowrap">
                         {apt.date} · {apt.time}
                       </span>
                       <span className="font-bold text-slate-900 text-sm">
                         {apt.patientName}
                       </span>
-                      <span className="text-xs font-mono text-slate-400">
+                      <span className="text-xs font-mono text-slate-400 whitespace-nowrap">
                         ({apt.patientPsuId})
                       </span>
-                      <span className="text-[11px] px-2 py-0.5 rounded bg-slate-100 font-medium text-slate-700">
+                      <span className="text-[11px] px-2 py-0.5 rounded bg-slate-100 font-medium text-slate-700 whitespace-nowrap shrink-0">
                         {apt.classification}
                       </span>
-                      <span className="text-[11px] px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-bold">
+                      <span className="text-[11px] px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-bold whitespace-nowrap shrink-0">
                         {apt.status}
                       </span>
                     </div>
@@ -552,19 +554,19 @@ export const DoctorDashboard: React.FC = () => {
                       <span className="font-bold text-slate-900 text-sm">
                         {apt.patientName}
                       </span>
-                      <span className="font-mono text-slate-400 text-xs">({apt.patientPsuId})</span>
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                      <span className="font-mono text-slate-400 text-xs whitespace-nowrap">({apt.patientPsuId})</span>
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 whitespace-nowrap shrink-0">
                         Finished Visit
                       </span>
                       {cons && (
                         cons.isApproved ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-300">
-                            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-300 whitespace-nowrap shrink-0">
+                            <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
                             <span>Consultation Approved</span>
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-300">
-                            <Clock className="w-3 h-3 text-amber-600" />
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-300 whitespace-nowrap shrink-0">
+                            <Clock className="w-3 h-3 text-amber-600 shrink-0" />
                             <span>Awaiting Doctor Approval</span>
                           </span>
                         )
@@ -704,18 +706,18 @@ export const DoctorDashboard: React.FC = () => {
                       <span className="font-bold text-slate-900 text-sm">
                         {pat ? `${pat.firstName} ${pat.lastName}` : 'Patient'}
                       </span>
-                      <span className="font-mono text-slate-400 text-xs">({pat?.psuId || con.patientId})</span>
-                      <span className="text-[11px] px-2 py-0.5 rounded bg-slate-100 font-medium text-slate-600">
+                      <span className="font-mono text-slate-400 text-xs whitespace-nowrap">({pat?.psuId || con.patientId})</span>
+                      <span className="text-[11px] px-2 py-0.5 rounded bg-slate-100 font-medium text-slate-600 whitespace-nowrap shrink-0">
                         {pat?.classification || 'Student'}
                       </span>
                       {con.isApproved ? (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
-                          <CheckCircle2 className="w-3 h-3 text-emerald-700" />
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 whitespace-nowrap shrink-0">
+                          <CheckCircle2 className="w-3 h-3 text-emerald-700 shrink-0" />
                           <span>Approved by Physician</span>
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300">
-                          <Clock className="w-3 h-3 text-amber-700" />
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300 whitespace-nowrap shrink-0">
+                          <Clock className="w-3 h-3 text-amber-700 shrink-0" />
                           <span>Pending Doctor Approval</span>
                         </span>
                       )}

@@ -1099,25 +1099,64 @@ clinicRouter.post('/appointments', (req: Request, res: Response) => {
   const apptData = req.body;
   const db = getDatabase();
 
+  let finalPatientId = apptData.patientId;
+  let finalPatientName = apptData.patientName;
+  let finalPatientPsuId = apptData.patientPsuId;
+  let finalClassification = apptData.classification || 'Student';
+
   if (user && user.role === 'student') {
+    const cleanEmail = (user.email || '').toLowerCase().trim();
+    const cleanInstId = (user.institutionalId || '').trim();
+    const cleanName = (user.fullName || '').toLowerCase().trim();
+
     const studentPatient = db.patients.find(
-      p => p.email.toLowerCase() === user.email.toLowerCase() || p.psuId === user.institutionalId
+      p => (cleanEmail && p.email?.toLowerCase().trim() === cleanEmail) ||
+           (cleanInstId && p.psuId?.trim() === cleanInstId) ||
+           (cleanName && `${p.firstName} ${p.lastName}`.toLowerCase().trim() === cleanName) ||
+           p.id === apptData.patientId
     );
-    if (!studentPatient || studentPatient.id !== apptData.patientId) {
-      return res.status(403).json({
-        error: 'Security Violation: Students can only schedule appointments for themselves.'
-      });
+
+    if (studentPatient) {
+      finalPatientId = studentPatient.id;
+      finalPatientName = `${studentPatient.firstName} ${studentPatient.lastName}`;
+      finalPatientPsuId = studentPatient.psuId;
+      finalClassification = studentPatient.classification || 'Student';
+    } else {
+      finalPatientName = user.fullName || apptData.patientName;
+      finalPatientPsuId = user.institutionalId || apptData.patientPsuId;
     }
   }
+
+  const now = new Date();
+  const timeStr = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) +
+    ' ' + now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
   const newAppt: Appointment = {
     ...apptData,
     id: `apt-${Date.now()}`,
+    patientId: finalPatientId,
+    patientName: finalPatientName,
+    patientPsuId: finalPatientPsuId,
+    classification: finalClassification,
     createdAt: new Date().toISOString()
   };
 
+  const newLog: ActivityLog = {
+    id: `log-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+    userId: user?.id || 'guest',
+    userName: user?.fullName || 'Student',
+    userRole: user?.role || 'student',
+    action: 'Scheduled Clinic Appointment',
+    module: 'Queue',
+    details: `Scheduled ${newAppt.purpose} for ${newAppt.patientName} on ${newAppt.date} at ${newAppt.time} with ${newAppt.doctorName}.`,
+    ipAddress: (req.ip || '127.0.0.1') + ' (Central Node)',
+    status: 'Success',
+    timestamp: timeStr
+  };
+
   saveDatabase({
-    appointments: [newAppt, ...db.appointments]
+    appointments: [newAppt, ...db.appointments],
+    activityLogs: [newLog, ...(db.activityLogs || []).slice(0, 199)]
   });
 
   res.json({ success: true, appointment: newAppt });

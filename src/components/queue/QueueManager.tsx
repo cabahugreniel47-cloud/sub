@@ -436,11 +436,11 @@ export const QueueManager: React.FC = () => {
                     }`}
                   >
                     <div className="flex items-start justify-between gap-2">
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono text-base font-black text-[#7F1416] bg-red-50 px-2 py-0.5 rounded-md border border-red-200">
+                      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                        <span className="font-mono text-base font-black text-[#7F1416] bg-red-50 px-2 py-0.5 rounded-md border border-red-200 whitespace-nowrap shrink-0">
                           {ticket.ticketNumber}
                         </span>
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold whitespace-nowrap shrink-0 ${
                           ticket.priority === 'Emergency' ? 'bg-red-100 text-red-800' :
                           ticket.priority === 'Urgent' ? 'bg-amber-100 text-amber-800' :
                           ticket.priority === 'Senior/PWD' ? 'bg-purple-100 text-purple-800' :
@@ -451,14 +451,14 @@ export const QueueManager: React.FC = () => {
 
                         {/* Call Status Badge */}
                         {isCalling && (
-                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-600 text-white flex items-center gap-1 animate-pulse">
-                            <BellRing className="w-2.5 h-2.5" />
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-600 text-white flex items-center gap-1 animate-pulse whitespace-nowrap shrink-0">
+                            <BellRing className="w-2.5 h-2.5 shrink-0" />
                             <span>CALLING</span>
                           </span>
                         )}
                         {isReady && (
-                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500 text-slate-950 flex items-center gap-1">
-                            <Clock className="w-2.5 h-2.5" />
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500 text-slate-950 flex items-center gap-1 whitespace-nowrap shrink-0">
+                            <Clock className="w-2.5 h-2.5 shrink-0" />
                             <span>READY</span>
                           </span>
                         )}
@@ -603,7 +603,7 @@ export const QueueManager: React.FC = () => {
                         </div>
                       ) : (
                         <div className="flex items-center justify-end gap-2">
-                          <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-semibold ${
+                          <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-semibold whitespace-nowrap shrink-0 ${
                             ticket.callStatus === 'Calling' ? 'bg-blue-100 text-blue-800 animate-pulse font-bold' :
                             ticket.callStatus === 'Ready' ? 'bg-amber-100 text-amber-900 font-bold' :
                             ticket.stage === 'Completed' ? 'bg-emerald-100 text-emerald-800 font-bold' :

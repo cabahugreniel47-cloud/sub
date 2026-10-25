@@ -499,37 +499,6 @@ export async function initPersistence(): Promise<void> {
           updatedFirestoreKeys.push('patients');
         }
       }
-      if (!merged.queue.some((q: QueueTicket) => q.id === 'q-student-1')) {
-        if (INITIAL_QUEUE.length > 0) {
-          merged.queue.push(...INITIAL_QUEUE);
-          updatedFirestoreKeys.push('queue');
-        }
-      }
-      if (!merged.consultations.some((c: Consultation) => c.id === 'con-student-1')) {
-        if (INITIAL_CONSULTATIONS.length > 0) {
-          merged.consultations.push(...INITIAL_CONSULTATIONS);
-          updatedFirestoreKeys.push('consultations');
-        }
-      }
-      if (!merged.vitalSigns.some((v: VitalSigns) => v.id === 'vs-student-1')) {
-        if (INITIAL_VITALS.length > 0) {
-          merged.vitalSigns.push(...INITIAL_VITALS);
-          updatedFirestoreKeys.push('vitalSigns');
-        }
-      }
-      if (!merged.certificates.some((c: MedicalCertificate) => c.id === 'cert-student-1')) {
-        if (INITIAL_CERTIFICATES.length > 0) {
-          merged.certificates.push(...INITIAL_CERTIFICATES);
-          updatedFirestoreKeys.push('certificates');
-        }
-      }
-      if (!merged.appointments.some((a: Appointment) => a.id === 'apt-student-1')) {
-        if (INITIAL_APPOINTMENTS.length > 0) {
-          merged.appointments.push(...INITIAL_APPOINTMENTS);
-          updatedFirestoreKeys.push('appointments');
-        }
-      }
-
       dbState = merged;
       console.log(`[Clinic DB] Loaded shared database from Firestore (rev ${dbState.revision}, ${dbState.users.length} users, ${dbState.patients.length} patients).`);
       
